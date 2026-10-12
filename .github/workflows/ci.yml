@@ -1,0 +1,39 @@
+name: CI
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install -r requirements-dev.lock
+      - run: pip install --no-deps -e .
+      - run: ruff check .
+      - run: ruff format --check .
+      - run: pytest
+      - run: prompttrial run --provider replay --fail-under 0.8
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t prompttrial:ci .
+      - name: Container smoke
+        run: |
+          docker run -d --name bench -p 127.0.0.1:8766:8766 prompttrial:ci
+          for attempt in $(seq 1 30); do
+            if curl --fail http://127.0.0.1:8766/health; then
+              curl --fail http://127.0.0.1:8766/static/app.js -o /tmp/app.js
+              docker exec bench prompttrial run --provider replay --fail-under 0.8
+              exit 0
+            fi
+            sleep 1
+          done
+          docker logs bench
+          exit 1

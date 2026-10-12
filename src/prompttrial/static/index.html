@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PromptTrial — LLM regression workspace</title>
+  <link rel="stylesheet" href="/static/style.css"><script src="/static/app.js" defer></script>
+</head>
+<body>
+  <header><a class="brand" href="/"><span class="logo">P<span>↗</span></span>PromptTrial</a><div class="header-right"><span class="dot"></span>LOCAL WORKSPACE<a href="/docs">API ↗</a></div></header>
+  <main>
+    <section class="intro"><div class="eyebrow">EVALUATE / COMPARE / REPEAT</div><h1>Хороший промпт.<br><span>Проверенный результат.</span></h1><p>Тестируйте поведение LLM, сравнивайте версии промптов<br>и находите ошибки до того, как их увидит пользователь.</p></section>
+    <div class="workspace">
+      <aside>
+        <div class="section-label">01 / НОВЫЙ ЗАПУСК</div>
+        <form id="run-form">
+          <label for="provider">Источник ответов</label><select id="provider"><option value="replay">Демо · записанные ответы</option><option value="local">Локальная LLM</option></select>
+          <label for="prompt">Версия промпта</label><select id="prompt"><option value="strict">Strict · явные ограничения</option><option value="basic">Basic · короткая инструкция</option></select>
+          <label for="repetitions">Повторов каждого задания</label><select id="repetitions"><option value="1">1 · быстрый прогон</option><option value="3">3 · проверить стабильность</option><option value="5">5 · расширенный прогон</option></select>
+          <div class="suite-card"><span>REGRESSION SUITE</span><strong id="case-count">24 задания</strong><p>JSON extraction<br>Arithmetic<br>Prompt injection<br>Missing information</p><small>English + Русский</small></div>
+          <button class="primary" id="run" type="submit">Запустить проверку <span>↗</span></button>
+          <button class="secondary" id="cancel" type="button" hidden>Остановить запуск</button>
+        </form>
+        <p class="hint" id="provider-note">Демо проверяет работу инструмента на записанных ответах. Это не оценка качества модели.</p>
+        <div class="section-label history-label">ИСТОРИЯ ЗАПУСКОВ</div><div id="history"><p class="hint">Здесь появятся ваши запуски.</p></div>
+      </aside>
+      <section class="main-panel">
+        <div class="panel-top"><span class="section-label">02 / РЕЗУЛЬТАТЫ</span><span id="status" role="status" aria-live="polite">Готов к запуску</span></div>
+        <div id="error" role="alert" hidden></div>
+        <div id="empty"><div class="empty-icon">↗</div><h2>От предположений к проверкам</h2><p>Один прогон — 24 конкретных задания.<br>Каждый результат можно открыть и проверить.</p><div class="tags"><span>Exact checks</span><span>Version hashes</span><span>Regression diff</span></div></div>
+        <div id="report" hidden>
+          <div class="report-head"><div><span class="badge" id="mode-badge"></span><h2 id="report-title"></h2><p id="report-subtitle"></p></div><div class="exports"><a id="export-json">JSON ↓</a><a id="export-md">Отчёт ↓</a></div></div>
+          <div id="scope" class="notice"></div>
+          <div class="metric-grid" id="metrics"></div>
+          <div class="section-label">ПОВЕДЕНИЕ ПО КАТЕГОРИЯМ</div><div id="categories"></div>
+          <div class="cases-heading"><h3>Проверки</h3><label class="filter"><input type="checkbox" id="failed-only"> Только ошибки</label></div><div id="cases"></div>
+          <details class="metadata"><summary>Версии и воспроизводимость</summary><div id="metadata"></div></details>
+        </div>
+      </section>
+    </div>
+    <section class="compare-panel"><div><div class="section-label">03 / СРАВНЕНИЕ ВЕРСИЙ</div><h2>Что изменил новый промпт?</h2><p>Сравнение доступно для одинаковых модели, набора заданий и числа повторов.</p></div><form id="compare-form"><label for="baseline">Базовый запуск</label><select id="baseline" required></select><label for="candidate">Новый запуск</label><select id="candidate" required></select><button class="secondary" type="submit">Сравнить ↗</button></form><div id="comparison" role="status" aria-live="polite"></div></section>
+    <footer><span>PromptTrial / LLM evaluation engineering</span><span>Прохождение этих тестов не доказывает общее качество модели.</span></footer>
+  </main>
+</body>
+</html>

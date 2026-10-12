@@ -21,13 +21,21 @@ Date: 2026-10-12. Host: macOS, Python 3.13.0.
 - Built a wheel and inspected its contents: the test suite JSON and HTML/CSS/JavaScript
   assets are packaged. `preview.png` records the browser workspace.
 
-## Not verified
+## GitHub publication
+
+Published on 2026-10-12 to [egorryabushko/prompttrial](https://github.com/egorryabushko/prompttrial).
+All 31 tracked project files, including the preview image, were uploaded. The initial
+published source tree exactly matched the local verified tree:
+`0e348e3e7a9902e4764a1ece44a9e05f419a3129`.
+The push triggered [GitHub CI](https://github.com/egorryabushko/prompttrial/actions/runs/38241479178).
+Check the linked run for its result; this publication record does not assert that it passed.
+
+## Not verified locally
 
 - No local LLM server was listening on the checked default ports 8080 or 11434.
   The local model adapter was tested with mocked HTTP responses, not real model inference.
 - Docker is not installed on this host; the Dockerfile and CI container smoke are supplied
   but a runtime container was not built here.
-- GitHub CI has not run for this new local project. No new GitHub repository has been published.
 - Python 3.11 and Linux execution are declared CI checks, not locally observed runs.
 
 The suite is authored development data. It is not independently labeled held-out evaluation.
